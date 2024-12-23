@@ -23,8 +23,11 @@ export default function Auth() {
           setSignupMessage(
             "Account created successfully! You can now sign in."
           );
+          setIsLogin(true); // Switch to login page
         } else {
-          setSignupMessage("Failed to create account. Please try again.");
+          throw new Error(
+            "Failed to create account. Please check your inputs."
+          );
         }
       }
       if (user) {
@@ -32,7 +35,15 @@ export default function Auth() {
         navigate("/"); // Adjust the route if your homepage path is different
       }
     } catch (err) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Sign-up failed due to an unknown error.";
       console.error(isLogin ? "Login failed:" : "Sign-up failed:", err);
+      setSignupMessage(errorMessage);
+      if (!isLogin) {
+        setIsLogin(false); // Stay on Sign-Up page for corrections
+      }
     }
   };
 
@@ -98,7 +109,13 @@ export default function Auth() {
           </div>
           {error && <div className="text-red-600 text-sm">{error}</div>}
           {signupMessage && (
-            <div className="text-green-600 text-sm">{signupMessage}</div>
+            <div
+              className={`text-sm ${
+                isLogin ? "text-red-600" : "text-green-600"
+              }`}
+            >
+              {signupMessage}
+            </div>
           )}
           <button
             type="submit"

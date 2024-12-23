@@ -1,4 +1,5 @@
 import create from "zustand";
+import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabase/client"; // Adjust path if needed
 
 interface AuthState {
@@ -6,6 +7,12 @@ interface AuthState {
   loading: boolean;
   error: string | null;
   signIn: (email: string, password: string) => Promise<void>;
+  signUp: (
+    email: string,
+    password: string,
+    username: string
+  ) => Promise<{ user: User | null; session: Session | null }>;
+  signOut: () => Promise<void>;
   initialize: () => Promise<void>;
 }
 
@@ -31,16 +38,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       console.error("Sign-in error:", err);
     }
   },
-  signOut: async () => {
-    console.log("Attempting to log out...");
-    try {
-      await supabase.auth.signOut(); // Logs the user out from Supabase
-      console.log("Logout successful");
-      set({ user: null }); // Clear the user state
-    } catch (err) {
-      console.error("Logout failed:", err);
-    }
-  },
+
   signUp: async (email: string, password: string, username: string) => {
     console.log("Attempting to sign up...");
     set({ loading: true, error: null });
@@ -56,12 +54,24 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       console.log("Sign-up successful:", data.user);
       set({ user: data.user, loading: false });
+      return data; // Return data for feedback in the Auth component
     } catch (err) {
       console.error("Sign-up failed:", err);
       const errorMessage =
         err instanceof Error ? err.message : "Sign-up failed";
       set({ loading: false, error: errorMessage });
       throw err;
+    }
+  },
+
+  signOut: async () => {
+    console.log("Attempting to log out...");
+    try {
+      await supabase.auth.signOut(); // Logs the user out from Supabase
+      console.log("Logout successful");
+      set({ user: null }); // Clear the user state
+    } catch (err) {
+      console.error("Logout failed:", err);
     }
   },
 
