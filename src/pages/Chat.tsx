@@ -1,16 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useSessionStore } from '../stores/sessionStore';
-import { useMessageStore } from '../stores/messageStore';
-import { ArrowLeft, Send } from 'lucide-react';
+import React, { useEffect, useRef, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useSessionStore } from "../stores/sessionStore";
+import { useMessageStore } from "../stores/messageStore";
+import { ArrowLeft, Send } from "lucide-react";
 
 export default function Chat() {
   const { sessionId } = useParams<{ sessionId: string }>();
   const navigate = useNavigate();
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [newMessage, setNewMessage] = useState('');
+  const [newMessage, setNewMessage] = useState("");
   const { currentSession, joinSession, leaveSession } = useSessionStore();
-  const { messages, loading, subscribeToMessages, unsubscribeFromMessages, sendMessage } = useMessageStore();
+  const {
+    messages,
+    loading,
+    subscribeToMessages,
+    unsubscribeFromMessages,
+    sendMessage,
+  } = useMessageStore();
 
   useEffect(() => {
     if (sessionId) {
@@ -24,7 +30,7 @@ export default function Chat() {
   }, [sessionId, joinSession, subscribeToMessages, unsubscribeFromMessages]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -33,16 +39,16 @@ export default function Chat() {
 
     try {
       await sendMessage(newMessage, sessionId);
-      setNewMessage('');
+      setNewMessage("");
     } catch (error) {
-      console.error('Failed to send message:', error);
+      console.error("Failed to send message:", error);
     }
   };
 
   const handleLeaveSession = async () => {
     if (sessionId) {
       await leaveSession(sessionId);
-      navigate('/sessions');
+      navigate("/sessions");
     }
   };
 
@@ -65,7 +71,9 @@ export default function Chat() {
             >
               <ArrowLeft className="h-6 w-6" />
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">{currentSession.name}</h1>
+            <h1 className="text-2xl font-bold text-gray-900">
+              {currentSession.name}
+            </h1>
           </div>
         </div>
       </header>

@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useSessionStore } from '../stores/sessionStore';
-import { useAuthStore } from '../stores/authStore';
-import { LogOut, Plus } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSessionStore } from "../stores/sessionStore";
+import { useAuthStore } from "../stores/authStore";
+import { LogOut, Plus } from "lucide-react";
 
 export default function Sessions() {
   const navigate = useNavigate();
   const { sessions, loading, fetchSessions, createSession } = useSessionStore();
   const { user, signOut } = useAuthStore();
-  const [newSessionName, setNewSessionName] = useState('');
-  const [error, setError] = useState('');
+  const [newSessionName, setNewSessionName] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchSessions();
@@ -17,13 +17,13 @@ export default function Sessions() {
 
   const handleCreateSession = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     try {
       await createSession(newSessionName);
-      setNewSessionName('');
+      setNewSessionName("");
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(err instanceof Error ? err.message : "An error occurred");
     }
   };
 
@@ -83,7 +83,9 @@ export default function Sessions() {
                 className="bg-white shadow rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer"
                 onClick={() => handleJoinSession(session.id)}
               >
-                <h3 className="text-lg font-medium text-gray-900">{session.name}</h3>
+                <h3 className="text-lg font-medium text-gray-900">
+                  {session.name}
+                </h3>
                 <p className="mt-2 text-sm text-gray-500">
                   Created {new Date(session.created_at).toLocaleDateString()}
                 </p>

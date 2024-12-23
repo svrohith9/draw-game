@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useAuthStore } from './stores/authStore';
-import Auth from './pages/Auth';
-import Sessions from './pages/Sessions';
-import Chat from './pages/Chat';
+import React, { useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useAuthStore } from "./stores/authStore";
+import Auth from "./pages/Auth";
+import Sessions from "./pages/Sessions";
+import Chat from "./pages/Chat";
 
 function App() {
   const { initialize, loading, user } = useAuthStore();

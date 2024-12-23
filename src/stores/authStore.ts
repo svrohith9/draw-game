@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { supabase } from '../lib/supabase';
+import { create } from "zustand";
+import { supabase } from "../lib/supabase";
 
 interface Profile {
   id: string;
@@ -34,7 +34,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     if (data.user) {
       const { error: profileError } = await supabase
-        .from('profiles')
+        .from("profiles")
         .insert([{ id: data.user.id, username }]);
       if (profileError) throw profileError;
     }
@@ -45,20 +45,22 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ user: null });
   },
   initialize: async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
     if (session?.user) {
       const { data: profile } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', session.user.id)
+        .from("profiles")
+        .select("*")
+        .eq("id", session.user.id)
         .single();
 
       if (profile) {
         set({ user: profile });
       }
     }
-    
+
     set({ loading: false });
   },
 }));

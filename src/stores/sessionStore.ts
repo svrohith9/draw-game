@@ -1,11 +1,11 @@
-import { create } from 'zustand';
-import { 
-  fetchUserSessions, 
-  createUserSession, 
-  joinUserSession, 
-  leaveUserSession 
-} from '../lib/supabase/sessions';
-import type { Session } from '../types';
+import { create } from "zustand";
+import {
+  fetchUserSessions,
+  createUserSession,
+  joinUserSession,
+  leaveUserSession,
+} from "../lib/supabase/sessions";
+import type { Session } from "../types";
 
 interface SessionState {
   sessions: Session[];
@@ -29,7 +29,10 @@ export const useSessionStore = create<SessionState>((set) => ({
       const sessions = await fetchUserSessions();
       set({ sessions, loading: false });
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : 'Failed to fetch sessions', loading: false });
+      set({
+        error: err instanceof Error ? err.message : "Failed to fetch sessions",
+        loading: false,
+      });
       throw err;
     }
   },
@@ -43,7 +46,9 @@ export const useSessionStore = create<SessionState>((set) => ({
       }));
       await joinUserSession(session.id);
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : 'Failed to create session' });
+      set({
+        error: err instanceof Error ? err.message : "Failed to create session",
+      });
       throw err;
     }
   },
@@ -53,7 +58,9 @@ export const useSessionStore = create<SessionState>((set) => ({
       const session = await joinUserSession(sessionId);
       set({ currentSession: session });
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : 'Failed to join session' });
+      set({
+        error: err instanceof Error ? err.message : "Failed to join session",
+      });
       throw err;
     }
   },
@@ -63,7 +70,9 @@ export const useSessionStore = create<SessionState>((set) => ({
       await leaveUserSession(sessionId);
       set({ currentSession: null });
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : 'Failed to leave session' });
+      set({
+        error: err instanceof Error ? err.message : "Failed to leave session",
+      });
       throw err;
     }
   },
